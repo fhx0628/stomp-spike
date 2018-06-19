@@ -22,10 +22,10 @@ function connect(event) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
-        var socket = new SockJS('http://localhost:8080/ws');
+        var socket = new SockJS('http://localhost:8090/ws');
         stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, onConnected, onError);
+        stompClient.connect({"user-token": username}, onConnected, onError);
     }
     event.preventDefault();
 }
@@ -34,6 +34,8 @@ function connect(event) {
 function onConnected() {
     // Subscribe to the Public Topic
     stompClient.subscribe('/topic/public', onMessageReceived);
+    stompClient.subscribe('/topic/queue', onMessageReceived);
+      stompClient.subscribe('/user/queue/notification', onMessageReceived);
 
     // Tell your username to the server
     stompClient.send("/app/chat/add-user",
