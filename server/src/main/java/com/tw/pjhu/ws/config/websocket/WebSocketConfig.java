@@ -1,14 +1,18 @@
-package com.tw.pjhu.ws.config;
+package com.tw.pjhu.ws.config.websocket;
 
+import com.tw.pjhu.ws.config.websocket.interceptor.AddSessionIdToWSMessageInterceptor;
+import com.tw.pjhu.ws.config.websocket.interceptor.RegisterUserInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
 /**
  * Created by rajeevkumarsingh on 24/07/17.
  */
-@Configuration
-@EnableWebSocketMessageBroker
+//@Configuration
+//@EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     /**
@@ -17,13 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      * PS：端点的作用——客户端在订阅或发布消息到目的地址前，要连接该端点。
      * @param registry
      */
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
-                .addInterceptors()
-                .setAllowedOrigins("*")
-                .withSockJS();
-    }
+
 
     /**
      * 客户单向服务器端发送时的主题上面需要加"/app"作为前缀
@@ -35,8 +33,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/topic");   // Enables a simple in-memory broker
-
+        registry.enableSimpleBroker("/topic", "/queue");   // Enables a simple in-memory broker
+//        registry.enableStompBrokerRelay("/topic", "/queue")
+//                .setRelayPort(5672)
+//                .setRelayHost("127.0.0.1");
 
         //   Use this for enabling a Full featured broker like RabbitMQ
 
@@ -47,5 +47,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setClientLogin("guest")
                 .setClientPasscode("guest");
         */
+    }
+
+    /**
+     * 配置客户端入站通道拦截器
+     */
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.setInterceptors(createUserInterceptor());
+    }
+
+    @Bean
+    public RegisterUserInterceptor createUserInterceptor() {
+        return new RegisterUserInterceptor();
     }
 }

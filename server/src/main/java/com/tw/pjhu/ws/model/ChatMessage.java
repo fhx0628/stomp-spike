@@ -1,15 +1,19 @@
 package com.tw.pjhu.ws.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
-
-    public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
-    }
+    private String receiver;
 
     public MessageType getType() {
         return type;
@@ -33,5 +37,20 @@ public class ChatMessage {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+
+    public enum MessageType {
+        CHAT,
+        JOIN,
+        LEAVE
     }
 }
