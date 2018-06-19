@@ -1,6 +1,6 @@
-package com.tw.pjhu.ws.config.redis;
+package com.tw.pjhu.ws.redis.config;
 
-import com.tw.pjhu.ws.controller.redis.RedisMessageListener;
+import com.tw.pjhu.ws.redis.RedisMessageListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 
 @Configuration
 @RequiredArgsConstructor
-public class RedisMessagingConfiguration {
+public class RedisListenerConfiguration {
 
     @Autowired
     private RedisMessageListener redisMessageListener;
@@ -22,9 +22,9 @@ public class RedisMessagingConfiguration {
     private GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer;
 
     @Bean
-    public MessageListenerAdapter messageListenerInTopicAdapter() {
+    public MessageListenerAdapter messageListenerInGroupAdapter() {
         MessageListenerAdapter adapter = new MessageListenerAdapter(redisMessageListener);
-        adapter.setDefaultListenerMethod("listenRedisMessageInTopic");
+        adapter.setDefaultListenerMethod("listenRedisMessageInGroup");
         adapter.setSerializer(genericJackson2JsonRedisSerializer);
         return adapter;
     }
@@ -40,7 +40,7 @@ public class RedisMessagingConfiguration {
     public RedisMessageListenerContainer redisContainer(RedisConnectionFactory rcf) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(rcf);
-        container.addMessageListener(messageListenerInTopicAdapter(), new ChannelTopic("to-topic"));
+        container.addMessageListener(messageListenerInGroupAdapter(), new ChannelTopic("to-topic"));
         container.addMessageListener(messageListenerToUserAdapter(), new ChannelTopic("to-user"));
         return container;
     }

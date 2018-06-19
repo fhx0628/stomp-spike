@@ -1,6 +1,6 @@
-package com.tw.pjhu.ws.config.websocket.interceptor;
+package com.tw.pjhu.ws.websocket.config.interceptor;
 
-import com.tw.pjhu.ws.config.websocket.principal.WebSocketPrincipal;
+import com.tw.pjhu.ws.websocket.config.principal.*;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;

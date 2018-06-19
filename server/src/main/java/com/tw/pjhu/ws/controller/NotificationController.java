@@ -1,5 +1,6 @@
-package com.tw.pjhu.ws.controller.redis;
+package com.tw.pjhu.ws.controller;
 
+import com.tw.pjhu.ws.handler.NotificationHandler;
 import com.tw.pjhu.ws.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,24 +10,19 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class RedisMessageSender {
+public class NotificationController {
     @Autowired
-    private final RedisTemplate redisTemplate;
+    private NotificationHandler notificationHandler;
 
-    @Value("${server.port}")
-    private String port;
-
-    @PostMapping("/redis/send-message/topic")
-    public void sendRedisMessageInTopic(@RequestBody ChatMessage msg) {
-        redisTemplate.convertAndSend("to-topic", msg);
-    }
-
-    @PostMapping("/redis/send-message/user")
-    public void sendRedisMessageToUser(@RequestBody ChatMessage msg) {
-        redisTemplate.convertAndSend("to-user", msg);
+    @PostMapping("/send-notification")
+    @ResponseBody
+    public String despatchMessage(@RequestBody ChatMessage msg) {
+        notificationHandler.handle(msg);
+        return "SUCCESS";
     }
 }

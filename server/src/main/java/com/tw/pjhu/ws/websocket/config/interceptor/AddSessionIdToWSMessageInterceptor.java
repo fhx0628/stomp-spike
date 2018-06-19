@@ -1,4 +1,4 @@
-package com.tw.pjhu.ws.config.websocket.interceptor;
+package com.tw.pjhu.ws.websocket.config.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

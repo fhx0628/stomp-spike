@@ -1,4 +1,4 @@
-package com.tw.pjhu.ws.config.websocket.principal;
+package com.tw.pjhu.ws.websocket.config.principal;
 
 import java.security.Principal;
 

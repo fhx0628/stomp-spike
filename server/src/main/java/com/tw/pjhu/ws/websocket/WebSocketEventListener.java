@@ -1,4 +1,4 @@
-package com.tw.pjhu.ws.controller;
+package com.tw.pjhu.ws.websocket;
 
 import com.tw.pjhu.ws.model.ChatMessage;
 import org.slf4j.Logger;

@@ -1,6 +1,7 @@
 package com.tw.pjhu.ws.controller;
 
 import com.tw.pjhu.ws.model.ChatMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -8,6 +9,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+@Slf4j
 @Controller
 public class ChatController {
     @Value("${server.port}")
@@ -20,7 +22,7 @@ public class ChatController {
     @MessageMapping("/chat/send-message")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        System.out.println("send message");
+        log.debug("send message");
         return chatMessage;
     }
 

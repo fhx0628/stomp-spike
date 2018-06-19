@@ -1,4 +1,4 @@
-package com.tw.pjhu.ws.controller.redis;
+package com.tw.pjhu.ws.redis;
 
 import com.tw.pjhu.ws.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ public class RedisMessageListener {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    public void listenRedisMessageInTopic (ChatMessage redisMsg) {
-        log.info(port +" receive message : " + redisMsg);
+    public void listenRedisMessageInGroup (ChatMessage redisMsg) {
+        log.debug(port +" receive message : " + redisMsg);
         simpMessagingTemplate.convertAndSend("/topic/public", redisMsg);
     }
 
     public void listenRedisMessageToUser (ChatMessage redisMsg) {
-        log.info(port +" receive message : " + redisMsg);
+        log.debug(port +" receive message : " + redisMsg);
         simpMessagingTemplate.convertAndSendToUser(redisMsg.getReceiver(),"/queue/notification", redisMsg);
     }
 }
